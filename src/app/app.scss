@@ -12,3 +12,13 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+form#home-form1,
+.contenido-lista,
+.borde-transparente {
+    background: #ffffff3d;
+    padding: 10px;
+    margin-bottom: 20px;
+    /* border-right: thin dotted #0400007a; */
+    /* border-bottom: thin dotted #0000007d; */
+    border-radius: 3px;
+}

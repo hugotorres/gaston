@@ -1,23 +1,34 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
+    <ion-navbar color="danger">
+        <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>List</ion-title>
-  </ion-navbar>
+        <ion-title>Categorias</ion-title>
+    </ion-navbar>
+    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10" preserveAspectRatio="none">
+      <polygon points="100 0 100 10 0 10" />
+    </svg>-->
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon [name]="item.icon" item-start></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-end>
-        {{item.note}}
-      </div>
-    </button>
-  </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div>
+
+<ion-content padding>
+    <div class="contenido-categorias">
+        <ion-input [(ngModel)]="nuevaCategoria" placeholder="Nombre categoria">
+
+        </ion-input>
+        <button ion-button button-block block (click)="agregarCategoria()">Nueva Categoria</button>
+
+
+
+    </div>
+    <hr>
+    <div class="contenido-categorias">
+
+        <ion-item-divider ion-item no-line *ngFor="let categoria of categorias">
+            {{categoria}} <button ion-button> Eliminar</button>
+        </ion-item-divider>
+
+    </div>
+
+
 </ion-content>

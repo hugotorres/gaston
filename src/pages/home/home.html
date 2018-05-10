@@ -8,8 +8,13 @@
 </ion-header>
 
 <ion-content padding>
-    <h3>Tus Gastos</h3>
+    <div class="borde-transparente">
+        <img src="https://cdn.vectorstock.com/i/1000x1000/01/52/homeless-beggar-vector-11250152.jpg" alt="gaston">
+    </div>
+
     <form id="home-form1" class="list">
+        <h4></h4>
+        <h3>Nuevo gasto</h3>
         <ion-list>
 
             <ion-item>
@@ -23,31 +28,49 @@
 
             <ion-item>
                 <ion-label floating>Categoria</ion-label>
-                <ion-input type="text" name="information" [(ngModel)]="nuevo.categoria"></ion-input>
+                <ion-select [(ngModel)]="nuevo.categoria" name="categoria2" interface="action-sheet">
+                    <ion-option value="ropa">Ropa</ion-option>
+                    <ion-option value="Comida">Comida</ion-option>
+                </ion-select>
             </ion-item>
 
         </ion-list>
 
-        <button ion-button primary (click)="agregarNuevoGasto()">Guardar</button>
+        <button ion-button primary block (click)="agregarNuevoGasto()" [disabled]="!nuevo.categoria">Guardar</button>
 
     </form>
+    <div class="contenido-lista">
+        <ion-list>
 
+            <h2>Ultimos gastos</h2>
 
-
+            <ion-item-sliding *ngFor="let gasto of gastos">
+                <ion-item>
+                    <h2> {{gasto.nombre}}</h2>
+                    <p>{{gasto.categoria}}</p>
+                    <span class="fecha"> {{gasto.fecha}}</span>
+                    <ion-badge item-end padding> {{gasto.valor}}</ion-badge>
+                </ion-item>
+                <ion-item-options side="left">
+                    <button ion-button color="danger">
+            <ion-icon name="delete"></ion-icon>
+            Delete
+          </button>
+                </ion-item-options>
+                <ion-item-options side="right">
+                    <button ion-button color="secondary">
+            <ion-icon name="edit"></ion-icon>
+            Edit
+          </button>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-list>
+    </div>
 
 
 
     <!-- charts-->
 
 
-
-    <ion-card>
-        <ion-card-header>
-            Bar Chart
-        </ion-card-header>
-        <ion-card-content>
-            <canvas #barCanvas></canvas>
-        </ion-card-content>
-    </ion-card>
 
 </ion-content>

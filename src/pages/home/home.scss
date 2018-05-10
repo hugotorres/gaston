@@ -1,3 +1,44 @@
 page-home {
-
+    span.fecha {
+        font-size: 9px;
+        text-transform: capitalize;
+        text-decoration: overline;
+        color: grey;
+    }
+    @keyframes animatedBackground {
+        from {
+            background-position: 0 0;
+        }
+        to {
+            background-position: 100% 0;
+        }
+    }
+    @-webkit-keyframes animatedBackground {
+        from {
+            background-position: 0 0;
+        }
+        to {
+            background-position: 100% 0;
+        }
+    }
+    .scroll-content {
+        background-image: url(/assets/imgs/bg-clouds.png);
+        background-position: 0px 0px;
+        background-repeat: repeat-x;
+        background-size: cover;
+        background-color: black;
+        background-blend-mode: difference;
+        -webkit-animation: animatedBackground 50s linear infinite;
+        -moz-animation: animatedBackground 50s linear infinite;
+        -ms-animation: animatedBackground 50s linear infinite;
+        -o-animation: animatedBackground 50s linear infinite;
+        animation: animatedBackground 50s linear infinite;
+    }
+    .list-md .item-block .item-inner {
+        border-bottom: 1px solid #dedede00;
+    }
+    .item.item-block.item-input {
+        /* border-radius: 11px 0px 11px 0px; */
+        margin-bottom: 2px;
+    }
 }
