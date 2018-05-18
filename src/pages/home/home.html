@@ -7,63 +7,136 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-    <div class="borde-transparente">
-        <img src="https://cdn.vectorstock.com/i/1000x1000/01/52/homeless-beggar-vector-11250152.jpg" alt="gaston">
-    </div>
-
-    <form id="home-form1" class="list">
-        <h4></h4>
-        <h3>Nuevo gasto</h3>
-        <ion-list>
-
+<ion-content>
+    <ion-row class="borde-transparente cabezote-home" color="danger">
+        <ion-col>
+            <img src="assets/imgs/homeless.jpg" alt="gaston" width="200px" (click)="toggleClass(item)" [ngClass]="{'active': item}">
+            <div class="context" *ngIf="coinsvisible">
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+                <div class="square"></div>
+            </div>
+        </ion-col>
+        <ion-col>
             <ion-item>
-                <ion-label floating>Dinero</ion-label>
-                <ion-input type="number" name="price" [(ngModel)]="nuevo.valor"></ion-input>
+                <p class="titulo-superior">Disponible</p>
+                <p>{{(settingsIngreso-(settingGastoFijo+total)) |currency }}</p>
             </ion-item>
             <ion-item>
-                <ion-label floating>Nombre</ion-label>
-                <ion-input type="text" name="name" [(ngModel)]="nuevo.nombre"></ion-input>
+                <p class="titulo-superior">Total gastos</p>
+                <p>{{total + settingGastoFijo |currency }}</p>
             </ion-item>
-
             <ion-item>
-                <ion-label floating>Categoria</ion-label>
-                <ion-select [(ngModel)]="nuevo.categoria" name="categoria2" interface="action-sheet">
-                    <ion-option value="ropa">Ropa</ion-option>
-                    <ion-option value="Comida">Comida</ion-option>
-                </ion-select>
+                <p class="titulo-superior">% diario disponible</p>
+                <p>{{(settingsIngreso - (settingGastoFijo + total))/30 |currency }}</p>
             </ion-item>
+        </ion-col>
+    </ion-row>
+    <div class="linea-diagonal-roja"></div>
+    <ion-fab right bottom *ngIf="gastoEditable!= 'nuevo'">
+        <button ion-fab color="light" (click)="crearGasto()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+    </ion-fab>
 
-        </ion-list>
 
-        <button ion-button primary block (click)="agregarNuevoGasto()" [disabled]="!nuevo.categoria">Guardar</button>
 
-    </form>
+
+
     <div class="contenido-lista">
-        <ion-list>
+        <div class="formularios">
+            <!--formulario ingreso nuevo gasto-->
+            <form id="home-form1" class="list" id="formNuevo" *ngIf="gastoEditable=='nuevo'">
 
-            <h2>Ultimos gastos</h2>
+                <ion-list-header color="dark">
+                    <h2>Nuevo gasto</h2>
+                    <ion-icon item-end name="close" outline (click)="gastoEditable=null"></ion-icon>
+                </ion-list-header>
+                <ion-list>
+                    <ion-item>
+                        <ion-label floating>Dinero</ion-label>
+                        <ion-input type="number" name="price" [(ngModel)]="nuevo.valor"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label floating>Nombre</ion-label>
+                        <ion-input type="text" name="name" [(ngModel)]="nuevo.nombre"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label floating>Categoria</ion-label>
+                        <ion-select [(ngModel)]="nuevo.categoria" name="categoria2" interface="popover">
+                            <ion-option *ngFor="let categoria of categorias" [value]="categoria.$value">{{categoria.$value | uppercase}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-list>
+                <button ion-button primary block (click)="agregarNuevoGasto()" [disabled]="!nuevo.categoria || !nuevo.valor">Guardar</button>
+            </form>
+            <!--inicio formulario edicion gasto-->
+            <form id="home-form2" class="list" id="formEdicion" *ngIf="gastoEditable=='edicion'">
+                <h3>Editar Gasto</h3>
+                <ion-icon item-end name="close" outline (click)="gastoEditable=null"></ion-icon>
+                <ion-list>
+                    <ion-item>
+                        <ion-label floating>Dinero</ion-label>
+                        <ion-input type="number" name="price" [(ngModel)]="viejo.valor"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label floating>Nombre</ion-label>
+                        <ion-input type="text" name="name" [(ngModel)]="viejo.nombre"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label floating>Categoria</ion-label>
+                        <ion-select [(ngModel)]="viejo.categoria" name="categoria2" interface="popover">
+                            <ion-option *ngFor="let categoria of categorias" [value]="categoria.$value">{{categoria.$value | uppercase}}</ion-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-list>
+                <button ion-button primary block (click)="guardarGasto()" [disabled]="!viejo.categoria">Guardar</button>
+            </form>
+        </div>
+        <hr>
+        <div class="coins2">
+        </div>
+        <ion-list *ngIf="hayGastos">
+            <div class="contenedoristacategoria" *ngFor="let categoryName of categoryNames">
+                <ion-list-header (click)="categoriaActiva=!categoriaActiva">
+                    <h2>
+                        {{categoryName}}
+                    </h2>
+                    <ion-badge color="primary" item-end>{{totalesCategoria[categoryName] |currency}}</ion-badge>
+                    <ion-icon name="arrow-dropdown" [ngClass]="{'visible': categoriaActiva,'invisible':!categoriaActiva}" item-end></ion-icon>
+                    <ion-icon name="arrow-dropright" [ngClass]="{'visible': !categoriaActiva,'invisible':categoriaActiva}" item-end></ion-icon>
 
-            <ion-item-sliding *ngFor="let gasto of gastos">
-                <ion-item>
-                    <h2> {{gasto.nombre}}</h2>
-                    <p>{{gasto.categoria}}</p>
-                    <span class="fecha"> {{gasto.fecha}}</span>
-                    <ion-badge item-end padding> {{gasto.valor}}</ion-badge>
-                </ion-item>
-                <ion-item-options side="left">
-                    <button ion-button color="danger">
-            <ion-icon name="delete"></ion-icon>
-            Delete
-          </button>
-                </ion-item-options>
-                <ion-item-options side="right">
-                    <button ion-button color="secondary">
-            <ion-icon name="edit"></ion-icon>
-            Edit
-          </button>
-                </ion-item-options>
-            </ion-item-sliding>
+
+
+
+                </ion-list-header>
+                <ion-item-sliding *ngFor="let gasto of  gastosPorCategoria[categoryName]" [ngClass]="{'visible': categoriaActiva,'invisible':!categoriaActiva}">
+                    <ion-item>
+                        <h3> {{gasto.nombre}}</h3>
+                        <span class="fecha2"> {{gasto.fecha |date:'short'}}</span>
+                        <ion-badge item-end color="secondary"> {{gasto.valor |currency}}</ion-badge>
+                    </ion-item>
+                    <ion-item-options side="left">
+                        <button ion-button color="danger" (click)="deleteGasto(gasto)">
+              <ion-icon name="trash"></ion-icon>Borrar
+            </button>
+                    </ion-item-options>
+                    <ion-item-options side="right">
+                        <button ion-button color="secondary" (click)="editGasto(gasto)">
+              <ion-icon name="create" ></ion-icon>Editar
+            </button>
+                    </ion-item-options>
+                </ion-item-sliding>
+
+
+
+
+            </div>
+
+
+
+
         </ion-list>
     </div>
 

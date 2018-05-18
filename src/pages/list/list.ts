@@ -12,9 +12,10 @@ export class ListPage {
   items = ["item1", "item2"];
   data: any;
   gastos;
-  categorias =[];
+  categorias : any[];
   arregloObjetos: any[];
   nuevaCategoria;
+  categoriasOrdenadas;
   //items: Array<{title: string, note: string, icon: string}>;
   constructor(
     public navCtrl: NavController,
@@ -25,15 +26,28 @@ export class ListPage {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get("item");
     this.getDatafromFirebase();
-  }
+    //this.getGastosfromFirebase();
 
+  }
+  getGastosfromFirebase() {
+    this.afd.list("/gastos/").subscribe(data => {
+      var result = Object.keys(data).map(function(key) {
+        return  data[key];
+      });
+      this.gastos =data;
+      this.categoriasOrdenadas = this.agruparPorCategoria(data);
+      console.log('ordenadas'+this.categoriasOrdenadas);
+    });
+
+  }
   getDatafromFirebase() {
-    this.afd.object("/categorias/").subscribe(data => {
+    this.afd.list("/categorias/").subscribe(data => {
       var result = Object.keys(data).map(function(key) {
         return  data[key];
       });
       this.categorias =result;
-      console.log(this.categorias);
+      this.categoriasOrdenadas = this.agruparPorCategoria(result);
+      console.log('ordenadas'+this.categoriasOrdenadas);
     });
 
   }
@@ -72,6 +86,18 @@ export class ListPage {
     this.navCtrl.push(ListPage, {
       item: item
     });
+  }
+  deleteCategoria(categoria) {
+    console.log(categoria.$key);
+    this.afd
+      .list("/categorias/")
+      .remove(categoria.$key)
+      .then(data => {
+        console.log("categoria borrada");
+      })
+      .catch(error => {
+        console.log("problemas al borrar");
+      });
   }
   ionViewDidLoad() {
 

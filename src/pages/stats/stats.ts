@@ -2,14 +2,7 @@ import { Component, ViewChild } from "@angular/core";
 import { IonicPage, NavController, NavParams } from "ionic-angular";
 import { Chart } from "chart.js";
 import "rxjs/add/operator/map";
-/**
- * Generated class for the StatsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
-@IonicPage()
 @Component({
   selector: "page-stats",
   templateUrl: "stats.html"

@@ -23,10 +23,12 @@
     </div>
     <hr>
     <div class="contenido-categorias">
-
-        <ion-item-divider ion-item no-line *ngFor="let categoria of categorias">
-            {{categoria}} <button ion-button> Eliminar</button>
-        </ion-item-divider>
+        <ion-list>
+            <ion-item no-lines *ngFor="let categoria of categorias">
+                {{categoria.$value}}
+                <button ion-button item-end color="danger" (click)="deleteCategoria(categoria)"> Eliminar</button>
+            </ion-item>
+        </ion-list>
 
     </div>
 
