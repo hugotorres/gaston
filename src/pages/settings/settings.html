@@ -8,8 +8,8 @@
 
     <ion-navbar color="danger">
         <button ion-button menuToggle>
-            <ion-icon name="menu"></ion-icon>
-          </button>
+      <ion-icon name="menu"></ion-icon>
+    </button>
         <ion-title>Ajustes</ion-title>
     </ion-navbar>
 
@@ -17,36 +17,53 @@
 
 
 <ion-content>
-    <div class="contenido-settings">
-        <ion-item>
-            <ion-label>Ingreso</ion-label>
-            <ion-input type="number" [(ngModel)]="nuevoSetting.ingreso" placeholder="Ingreso Mensual">
-            </ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label>Gastos Recurrentes</ion-label>
-            <ion-input type="number" [(ngModel)]="nuevoSetting.gastosfijos" placeholder=" Ej. Arriendo, Pension">
-            </ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label>Fecha de pago</ion-label>
-            <ion-input type="date" [(ngModel)]="nuevoSetting.fechapago">
-            </ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label>Genero</ion-label>
-            <ion-input [(ngModel)]="nuevoSetting.genero" placeholder=" Genero">
+    <ion-grid>
+        <div class="contenido-settings">
 
-            </ion-input>
+            <div class="form-settings" *ngIf="!settingEdit">
+                <ion-item>
+                    <ion-label>Ingreso</ion-label>
+                    <ion-input type="number" [(ngModel)]="nuevoSetting.ingreso">
+                    </ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Genero</ion-label>
+                    <ion-input [(ngModel)]="nuevoSetting.genero" placeholder=" Genero">
+                    </ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Gastos Fijos</ion-label>
+                    <ion-input [(ngModel)]="nuevoSetting.gastosfijos" placeholder=" Gastos fijos">
+                    </ion-input>
+                </ion-item>
 
-        </ion-item>
+                <ion-row *ngFor="let campo of camposRecurrentes" padding>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label stacked>Valor</ion-label>
+                            <ion-input [(ngModel)]="campo.valorAdicional"></ion-input>
+                        </ion-item>
 
-        <button ion-button button-block block (click)="guardarSettings()">Guardar</button>
+                    </ion-col>
+                    <ion-col>
+                        <ion-item>
+                            <ion-label stacked>Nombre</ion-label>
+                            <ion-input [(ngModel)]="campo.nombre"></ion-input>
+                        </ion-item>
+
+                    </ion-col>
 
 
 
-    </div>
+                </ion-row>
+                <button ion-button (click)="agregarCampo()" end-item color="secondary"> +</button>
+
+                <button ion-button (click)="sumarGastos()" end-item color="secondary">ok</button>
+                <button ion-button button-block block (click)="guardarSettings()">Guardar</button>
 
 
+            </div>
 
+        </div>
+    </ion-grid>
 </ion-content>

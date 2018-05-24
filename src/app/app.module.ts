@@ -11,7 +11,8 @@ import { SettingsPage } from "../pages/settings/settings";
 import { AngularFireModule } from "angularfire2";
 import { AngularFireDatabaseModule } from "angularfire2/database";
 import { StatusBar } from "@ionic-native/status-bar";
-import { Databaseservice } from '../providers/databaseservice/databaseservice';
+import { Gasto } from "../models/gasto";
+import { Settings } from "../providers/settings";
 
 var config = {
   apiKey: "AIzaSyBuLGQk2EB7DMdPqkbf8WoB4yX5TxhCJTs",
@@ -36,6 +37,6 @@ var config = {
   bootstrap: [IonicApp],
   entryComponents: [MyApp, HomePage, ListPage, StatsPage, SettingsPage],
   providers: [StatusBar, { provide: ErrorHandler, useClass: IonicErrorHandler },
-    Databaseservice]
+    Settings]
 })
 export class AppModule {}

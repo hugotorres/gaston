@@ -1,12 +1,10 @@
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams } from "ionic-angular";
-import { AngularFireModule } from "angularfire2";
+import { Gasto } from "../../models/gasto";
 
+import { AngularFireDatabase } from "angularfire2/database";
 import { ToastController } from "ionic-angular";
-import {
-  AngularFireDatabase,
-  FirebaseListObservable
-} from "angularfire2/database";
+import { FirebaseListObservable } from "angularfire2/database";
 
 @IonicPage()
 @Component({
@@ -14,57 +12,70 @@ import {
   templateUrl: "settings.html"
 })
 export class SettingsPage {
-  settings =[{'ingreso':0,'genero':'Masculino'}];
-  nuevoSetting ={'ingreso':0,'genero':'Masculino'};
+  settingEdit = false;
+  camposRecurrentes = [];
+  //settings: FirebaseListObservable;
+  settings: any[];
+  nuevoSetting: any = { genero: "", ingreso: 0, gastosfijos: 0 };
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
-    public afd: AngularFireDatabase,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public fbd: AngularFireDatabase
   ) {
-
+    this.getSettingsFromFirebase();
   }
-
+  getSettingsFromFirebase() {
+    this.fbd
+      .list("/settings/", {
+        query: {
+          limitToLast: 1
+        }
+      })
+      .subscribe(data => {
+        var result = Object.keys(data).map(function(key) {
+          return data[key];
+        });
+        this.settings = result;
+        this.nuevoSetting = result[0];
+        console.log(result);
+      });
+  }
+  agregarCampo() {
+    this.camposRecurrentes.push({ 'valorAdicional': null, 'nombre': null });
+  };
+  sumarGastos=function() {
+    let suma = 0;
+    for (let gasto of this.camposRecurrentes) {
+      console.log(gasto);
+      suma = suma + Number(gasto.valorAdicional);
+    }
+    this.nuevoSetting.gastosfijos =  suma;
+    this.camposRecurrentes=[];
+  }
+  agregarNuevoGasto() {
+    // this.gastosRecurrentes.add(new Gasto({'valor':0,'nombre':'','fecha':null}));
+    // this.settings.recurrentes.push(new Gasto(this.nuevoGastoRecurrente));
+    // this.guardarSettings(this.settings);
+  }
   ionViewWillLoad() {
-    this.getDatafromFirebase();
+    this.getSettingsFromFirebase();
+    console.log(this.settings);
   }
   presentToast(message) {
-
     let toast = this.toastCtrl.create({
       message: message,
-      duration: 2000,
+      duration: 1500,
       position: "top"
     });
     toast.onDidDismiss(() => {
       console.log("Dismissed toast");
-
     });
     toast.present();
   }
   guardarSettings() {
-    this.afd
-    .list("/settings/")
-    .push(this.nuevoSetting)
-    .then(data => {
-      console.log('success'+data);
-      this.presentToast('datos guardados');
-    })
-    .catch(error => {
-      console.log('error'+error);
-    });
-  }
-  getDatafromFirebase() {
-    this.afd
-      .list("/settings/", {
-        query: {
-          'limitToLast': 1
-        }
-      })
-      .subscribe(data => {
-        this.settings = data[0];
-        this.nuevoSetting = data[0];
-        console.log(this.settings);
-        this.presentToast('Datos recuperados');
-      });
+    this.fbd.list("/settings").push(this.nuevoSetting);
+    this.getSettingsFromFirebase();
+
+    this.presentToast("sus datos se han guardado");
   }
 }

@@ -48,7 +48,7 @@ export class HomePage {
         totall += Number(data[key].valor);
         console.log(data);
         let fechaG = data[key].fecha;
-let fechas=[];
+        let fechas=[];
         let FechaComparar =
           new Date(fechaG).getUTCDate() + "-" + new Date(fechaG).getUTCMonth();
 
@@ -56,7 +56,6 @@ let fechas=[];
           gastosFecha[data[key].fecha] = [];
         }
 
-        if (FechaComparar)
          gastosFecha[fechaG].push(data);
 
         console.log(gastosFecha[fechaG]);
@@ -84,8 +83,8 @@ let fechas=[];
         }
       })
       .subscribe(data => {
-        this.settingsIngreso = Number(data[0].ingreso);
-        this.settingGastoFijo = Number(data[0].gastosfijos);
+        //this.settingsIngreso = Number(data.ingreso);
+       //s this.settingGastoFijo = Number(data.gastosfijos);
         var result = Object.keys(data).map(function(key) {
           return data[key];
         });

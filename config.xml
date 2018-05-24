@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="xyz.hugoandrestorres.gaston" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="xyz.hugoandrestorres.gaston" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Gaston</name>
-    <description>awesome spending controller.</description>
+    <description>awesome expenses app.</description>
     <author email="hugotorreslinares@gmail.com" href="http://hugoandrestorres.xyz">Hugo Andres Torres</author>
     <content src="index.html" />
     <access origin="*" />
