@@ -31,9 +31,7 @@ export class ListPage {
   }
   getGastosfromFirebase() {
     this.afd.list("/gastos/").subscribe(data => {
-      var result = Object.keys(data).map(function(key) {
-        return  data[key];
-      });
+
       this.gastos =data;
       this.categoriasOrdenadas = this.agruparPorCategoria(data);
       console.log('ordenadas'+this.categoriasOrdenadas);

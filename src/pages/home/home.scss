@@ -238,7 +238,7 @@ page-home {
         background: indianred;
     }
     .cabezote-home img {
-        border-radius: 50%;
+        border-radius: 25%;
     }
     .contenedoristacategoria ion-badge.badge.badge-md.badge-md-primary {
         transform: rotate(-8deg);
@@ -253,5 +253,10 @@ page-home {
         box-shadow: 0px 5px 11px #c1c0c0;
         background: indianred;
         margin-top: -28px;
+    }
+    .chatbubble {
+        border-radius: 23px;
+        overflow: hidden;
+        background: white
     }
 }

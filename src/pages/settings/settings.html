@@ -32,34 +32,38 @@
                     </ion-input>
                 </ion-item>
                 <ion-item>
+                    <ion-label>Fecha Ingresos</ion-label>
+                    <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="nuevoSetting.fechaingresos"></ion-datetime>
+                </ion-item>
+                <ion-item>
                     <ion-label>Gastos Fijos</ion-label>
-                    <ion-input [(ngModel)]="nuevoSetting.gastosfijos" placeholder=" Gastos fijos">
+                    <ion-input elastic [(ngModel)]="nuevoSetting.gastosfijos" placeholder=" Gastos fijos">
                     </ion-input>
                 </ion-item>
 
-                <ion-row *ngFor="let campo of camposRecurrentes" padding>
+                <ion-row *ngFor="let campo of camposRecurrentes" color="light">
                     <ion-col>
                         <ion-item>
                             <ion-label stacked>Valor</ion-label>
                             <ion-input [(ngModel)]="campo.valorAdicional"></ion-input>
                         </ion-item>
-
                     </ion-col>
                     <ion-col>
                         <ion-item>
                             <ion-label stacked>Nombre</ion-label>
                             <ion-input [(ngModel)]="campo.nombre"></ion-input>
                         </ion-item>
-
                     </ion-col>
-
-
-
                 </ion-row>
-                <button ion-button (click)="agregarCampo()" end-item color="secondary"> +</button>
-
-                <button ion-button (click)="sumarGastos()" end-item color="secondary">ok</button>
-                <button ion-button button-block block (click)="guardarSettings()">Guardar</button>
+                <ion-row>
+                    <ion-col>
+                        <button ion-button block (click)="agregarCampo()" end-item color="primary"> nuevo gasto recurrente</button>
+                    </ion-col>
+                    <ion-col *ngIf="camposRecurrentes">
+                        <button ion-button block (click)="sumarGastos()" end-item color="primary">ok</button>
+                    </ion-col>
+                </ion-row>
+                <button ion-button button-block block (click)="guardarSettings()" color="secondary">Guardar</button>
 
 
             </div>

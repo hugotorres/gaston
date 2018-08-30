@@ -10,7 +10,7 @@
 <ion-content>
     <ion-row class="borde-transparente cabezote-home" color="danger">
         <ion-col>
-            <img src="assets/imgs/homeless.jpg" alt="gaston" width="200px" (click)="toggleClass(item)" [ngClass]="{'active': item}">
+            <img src="assets/imgs/homeless.png" alt="gaston" width="200px" (click)="toggleClass(item)" [ngClass]="{'active': item}">
             <div class="context" *ngIf="coinsvisible">
                 <div class="square"></div>
                 <div class="square"></div>
@@ -19,18 +19,27 @@
             </div>
         </ion-col>
         <ion-col>
-            <ion-item>
-                <p class="titulo-superior">Disponible</p>
-                <p>{{(settingsIngreso-(settingGastoFijo+total)) |currency }}</p>
-            </ion-item>
-            <ion-item>
-                <p class="titulo-superior">Total gastos</p>
-                <p>{{total + settingGastoFijo |currency }}</p>
-            </ion-item>
-            <ion-item>
-                <p class="titulo-superior">% diario disponible</p>
-                <p>{{(settingsIngreso - (settingGastoFijo + total))/30 |currency }}</p>
-            </ion-item>
+            <div class="chatbubble">
+                <ion-item no-lines>
+                    <p class="titulo-superior">
+                        <b>Disponible</b>
+                    </p>
+                    <p>{{(settingsIngreso-(settingGastoFijo+total)) |currency }}</p>
+                </ion-item>
+                <ion-item no-lines>
+                    <p class="titulo-superior">
+                        <b>Total gastos</b>
+                    </p>
+                    <p>{{total + settingGastoFijo |currency }}</p>
+                </ion-item>
+                <ion-item no-lines>
+                    <p class="titulo-superior">
+                        <b>Disponible diario</b>
+                    </p>
+                    <p>{{(settingsIngreso - (settingGastoFijo + total))/30 |currency }}</p>
+                </ion-item>
+            </div>
+
         </ion-col>
     </ion-row>
     <div class="linea-diagonal-roja"></div>
@@ -42,7 +51,11 @@
 
 
 
-
+    <ion-row>
+        <ion-col>
+            <button ion-button (click)="login()">Login with Facebook</button>
+        </ion-col>
+    </ion-row>
 
     <div class="contenido-lista">
         <div class="formularios">
@@ -94,56 +107,62 @@
                 <button ion-button primary block (click)="guardarGasto()" [disabled]="!viejo.categoria">Guardar</button>
             </form>
         </div>
-        <hr>
-        <div class="coins2">
-        </div>
-        <ion-list *ngIf="hayGastos">
-            <div class="contenedoristacategoria" *ngFor="let categoryName of categoryNames">
-                <ion-list-header (click)="categoriaActiva=!categoriaActiva">
-                    <h2>
-                        {{categoryName}}
-                    </h2>
-                    <ion-badge color="primary" item-end>{{totalesCategoria[categoryName] |currency}}</ion-badge>
-                    <ion-icon name="arrow-dropdown" [ngClass]="{'visible': categoriaActiva,'invisible':!categoriaActiva}" item-end></ion-icon>
-                    <ion-icon name="arrow-dropright" [ngClass]="{'visible': !categoriaActiva,'invisible':categoriaActiva}" item-end></ion-icon>
+        <ion-item>
+            <ion-label>Categoria / Fecha</ion-label>
+            <ion-toggle [(ngModel)]="lista"></ion-toggle>
+        </ion-item>
 
+        <div class="gastosxfecha" *ngIf="lista">
+            <div class="coins2">
 
-
-
-                </ion-list-header>
-                <ion-item-sliding *ngFor="let gasto of  gastosPorCategoria[categoryName]" [ngClass]="{'visible': categoriaActiva,'invisible':!categoriaActiva}">
-                    <ion-item>
-                        <h3> {{gasto.nombre}}</h3>
-                        <span class="fecha2"> {{gasto.fecha |date:'short'}}</span>
-                        <ion-badge item-end color="secondary"> {{gasto.valor |currency}}</ion-badge>
-                    </ion-item>
-                    <ion-item-options side="left">
-                        <button ion-button color="danger" (click)="deleteGasto(gasto)">
-              <ion-icon name="trash"></ion-icon>Borrar
-            </button>
-                    </ion-item-options>
-                    <ion-item-options side="right">
-                        <button ion-button color="secondary" (click)="editGasto(gasto)">
-              <ion-icon name="create" ></ion-icon>Editar
-            </button>
-                    </ion-item-options>
-                </ion-item-sliding>
-
-
-
-
+                <h4>Gastos x fecha </h4>
             </div>
+            <ion-item>
+                <ion-label>Date {{fechaSeleccionada}}</ion-label>
+                <ion-select [(ngModel)]="fechaSeleccionada">
+                    <ion-option value="{{fecha}}" *ngFor="let fecha of  gastosFechaKeys">{{fecha}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item *ngFor="let dia of gastosFechaArreglo[fechaSeleccionada]">
+                {{dia.nombre}} - {{dia.categoria}}
+                <br>{{dia.fecha|date:'short'}}
+                <ion-badge item-end>{{dia.valor |currency}}</ion-badge>
+            </ion-item>
+        </div>
+        <div class="gastosxcategorias" *ngIf="!lista">
+            <div class="coins2 ">
 
-
-
-
-        </ion-list>
+                <h4>Gastos x categoria</h4>
+            </div>
+            <ion-list *ngIf="hayGastos ">
+                <div class="contenedoristacategoria" *ngFor="let categoryName of categoryNames">
+                    <ion-list-header (click)="categoriaActiva=!categoriaActiva">
+                        <h2>
+                            <b>{{categoryName}}</b>
+                        </h2>
+                        <ion-badge color="primary" item-end>{{totalesCategoria[categoryName] |currency}}</ion-badge>
+                        <ion-icon name="arrow-dropdown" [ngClass]="{ 'visible': categoriaActiva, 'invisible':!categoriaActiva}" item-end></ion-icon>
+                        <ion-icon name="arrow-dropright" [ngClass]="{ 'visible': !categoriaActiva, 'invisible':categoriaActiva}" item-end></ion-icon>
+                    </ion-list-header>
+                    <ion-item-sliding *ngFor="let gasto of gastosPorCategoria[categoryName]" [ngClass]="{ 'visible': categoriaActiva, 'invisible':!categoriaActiva}">
+                        <ion-item>
+                            <h3> {{gasto.nombre}}</h3>
+                            <span class="fecha2"> {{gasto.fecha |date:'short'}}</span>
+                            <ion-badge item-end color="secondary"> {{gasto.valor |currency}}</ion-badge>
+                        </ion-item>
+                        <ion-item-options side="left">
+                            <button ion-button color="danger" (click)="deleteGasto(gasto)">
+                <ion-icon name="trash"></ion-icon>Borrar
+              </button>
+                        </ion-item-options>
+                        <ion-item-options side="right">
+                            <button ion-button color="secondary" (click)="editGasto(gasto)">
+                <ion-icon name="create"></ion-icon>Editar
+              </button>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </div>
+            </ion-list>
+        </div>
     </div>
-
-
-
-    <!-- charts-->
-
-
-
 </ion-content>

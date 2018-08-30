@@ -3,6 +3,7 @@
     <name>Gaston</name>
     <description>awesome expenses app.</description>
     <author email="hugotorreslinares@gmail.com" href="http://hugoandrestorres.xyz">Hugo Andres Torres</author>
+
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -77,5 +78,9 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashShowOnlyFirstTime" value="true" />
     <preference name="SplashScreenDelay" value="10" />
+    <plugin name="cordova-plugin-buildinfo" spec="^2.0.1" />
+    <plugin name="cordova-plugin-browsertab" spec="^0.2.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-universal-links-plugin" spec="~1.2.1" />
 </widget>

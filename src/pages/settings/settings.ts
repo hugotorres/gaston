@@ -1,10 +1,8 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
-import { Gasto } from "../../models/gasto";
+import { IonicPage, NavController} from "ionic-angular";
 
 import { AngularFireDatabase } from "angularfire2/database";
 import { ToastController } from "ionic-angular";
-import { FirebaseListObservable } from "angularfire2/database";
 
 @IonicPage()
 @Component({
@@ -16,7 +14,7 @@ export class SettingsPage {
   camposRecurrentes = [];
   //settings: FirebaseListObservable;
   settings: any[];
-  nuevoSetting: any = { genero: "", ingreso: 0, gastosfijos: 0 };
+  nuevoSetting: any = { 'genero': "", 'ingreso': 0, 'gastosfijos': 0,'fechaingresos':null };
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
@@ -37,7 +35,6 @@ export class SettingsPage {
         });
         this.settings = result;
         this.nuevoSetting = result[0];
-        console.log(result);
       });
   }
   agregarCampo() {
@@ -52,14 +49,9 @@ export class SettingsPage {
     this.nuevoSetting.gastosfijos =  suma;
     this.camposRecurrentes=[];
   }
-  agregarNuevoGasto() {
-    // this.gastosRecurrentes.add(new Gasto({'valor':0,'nombre':'','fecha':null}));
-    // this.settings.recurrentes.push(new Gasto(this.nuevoGastoRecurrente));
-    // this.guardarSettings(this.settings);
-  }
+
   ionViewWillLoad() {
     this.getSettingsFromFirebase();
-    console.log(this.settings);
   }
   presentToast(message) {
     let toast = this.toastCtrl.create({
@@ -75,7 +67,6 @@ export class SettingsPage {
   guardarSettings() {
     this.fbd.list("/settings").push(this.nuevoSetting);
     this.getSettingsFromFirebase();
-
     this.presentToast("sus datos se han guardado");
   }
 }

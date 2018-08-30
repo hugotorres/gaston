@@ -4,12 +4,14 @@ import { ToastController } from "ionic-angular";
 import { AlertController } from "ionic-angular";
 import { AngularFireDatabase } from "angularfire2/database";
 import { isArray } from "ionic-angular/util/util";
+import firebase from "firebase";
 @Component({
   selector: "page-home",
   templateUrl: "home.html"
 })
 export class HomePage {
   @ViewChild("formNuevo") formNuevo;
+  settings;
   gastoEditable = "";
   viejo: any;
   coinsvisible = false;
@@ -26,7 +28,11 @@ export class HomePage {
   categoryNames;
   totalesCategoria;
   total = 0;
+  lista = false;
+  gastosFechaArreglo = {};
+  gastosFechaKeys = [];
   categoriaActiva = false;
+  fechaSeleccionada;
   nuevo: any = { valor: null, categoria: null, nombre: null };
   constructor(
     public navCtrl: NavController,
@@ -37,42 +43,68 @@ export class HomePage {
   irCategorias() {
     this.navCtrl.push("ListPage");
   }
+  login=function() {
+    let provider = new firebase.auth.FacebookAuthProvider();
+    firebase
+      .auth()
+      .signInWithRedirect(provider)
+      .then(() => {
+        firebase
+          .auth()
+          .getRedirectResult()
+          .then(result => {
+            alert(JSON.stringify(result));
+          })
+          .catch(error => {
+            alert(JSON.stringify(error));
+          });
+      })
+      .catch(error => {
+        console.log("error" + error);
+      });
+  }
 
   getDataFromFirebase() {
+    let gastosFecha = {};
+    let organizado = [];
+
+    let totall = 0;
+    let fechasKeys = [];
     this.fbd.list("/gastos/").subscribe(data => {
       this.gastos = data;
-      let organizado = [];
-      let gastosFecha = [];
-      let totall = 0;
+
       Object.keys(data).map(function(key) {
         totall += Number(data[key].valor);
-        console.log(data);
         let fechaG = data[key].fecha;
-        let fechas=[];
         let FechaComparar =
-          new Date(fechaG).getUTCDate() + "-" + new Date(fechaG).getUTCMonth();
+          new Date(fechaG).getUTCDate() +
+          "-" +
+          new Date(fechaG).getUTCMonth() +
+          "-" +
+          new Date(fechaG).getUTCFullYear();
 
-        if (!gastosFecha[fechaG]) {
-          gastosFecha[data[key].fecha] = [];
+        if (!gastosFecha[FechaComparar]) {
+          gastosFecha[FechaComparar] = [];
         }
+        fechasKeys.push(FechaComparar);
+        gastosFecha[FechaComparar].push(data[key]);
 
-         gastosFecha[fechaG].push(data);
-
-        console.log(gastosFecha[fechaG]);
         //  sumamos los gastos por categoria //
         if (organizado[data[key].categoria])
           organizado[data[key].categoria] =
             Number(organizado[data[key].categoria]) + Number(data[key].valor);
         else organizado[data[key].categoria] = Number(data[key].valor);
       });
+      this.gastosFechaKeys = Object.keys(gastosFecha);
+      this.gastosFechaArreglo = gastosFecha;
+      console.log(this.gastosFechaArreglo);
+      console.log(this.gastosFechaKeys);
 
       this.total = totall;
       this.totalesCategoria = organizado;
-
       this.gastosPorCategoria = this.agruparPorCategoria(data);
       this.categoryNames = Object.keys(this.gastosPorCategoria);
       this.hayGastos = true;
-      console.log(this.gastosPorCategoria);
     });
   }
   getSettingsFromFirebase() {
@@ -83,13 +115,11 @@ export class HomePage {
         }
       })
       .subscribe(data => {
-        //this.settingsIngreso = Number(data.ingreso);
-       //s this.settingGastoFijo = Number(data.gastosfijos);
-        var result = Object.keys(data).map(function(key) {
+        this.settingsIngreso = Number(data[0].ingreso);
+        this.settingGastoFijo = Number(data[0].gastosfijos);
+        /* var result = Object.keys(data).map(function(key) {
           return data[key];
-        });
-
-        console.log(result);
+        });*/
       });
   }
   getCategoriasFromFirebase() {
@@ -97,7 +127,6 @@ export class HomePage {
       var result = Object.keys(data).map(function(key) {
         return data[key];
       });
-      console.log(result);
       this.categorias = result;
     });
   }

@@ -11,7 +11,6 @@ import { SettingsPage } from "../pages/settings/settings";
 import { AngularFireModule } from "angularfire2";
 import { AngularFireDatabaseModule } from "angularfire2/database";
 import { StatusBar } from "@ionic-native/status-bar";
-import { Gasto } from "../models/gasto";
 import { Settings } from "../providers/settings";
 
 var config = {

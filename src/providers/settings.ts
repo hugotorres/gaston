@@ -1,15 +1,10 @@
 import { Injectable } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
-import { AngularFireModule } from "angularfire2";
 import { Gasto } from "../models/gasto";
-import {
-  AngularFireDatabase,
-  FirebaseListObservable
-} from "angularfire2/database";
+import { AngularFireDatabase } from "angularfire2/database";
 
 @Injectable()
 export class Settings {
-  settings:any;
+  settings: any;
   gastos: Gasto[] = [];
 
   constructor(public afd: AngularFireDatabase) {}
@@ -26,8 +21,7 @@ export class Settings {
           this.gastos.push(new Gasto(gasto));
         }
         console.log(this.settings);
-        return this.settings= data;
-
+        return (this.settings = data);
 
         //this.nuevoSetting = data[0];
         //console.log(this.settings);

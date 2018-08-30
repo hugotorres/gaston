@@ -41,7 +41,9 @@
         "zone.js": "0.8.26"
     },
     "devDependencies": {
+        "@angular/cli": "^6.0.8",
         "@ionic/app-scripts": "3.1.9",
+        "@ionic/lab": "1.0.8",
         "typescript": "~2.6.2"
     },
     "description": "An Ionic project",
@@ -50,7 +52,8 @@
             "cordova-plugin-whitelist": {},
             "cordova-plugin-device": {},
             "cordova-plugin-ionic-webview": {},
-            "cordova-plugin-ionic-keyboard": {}
+            "cordova-plugin-ionic-keyboard": {},
+            "cordova-universal-links-plugin": {}
         },
         "platforms": [
             "android"
